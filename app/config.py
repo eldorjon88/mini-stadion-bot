@@ -12,4 +12,12 @@ class Config:
     DB_PASSWORD = os.getenv("DB_PASSWORD")
     DB_NAME = os.getenv("DB_NAME")
 
+
+class RegisterStates:
+    NAME = 0
+    CONTACT = 1
+    CONFIRM = 2
+
+
 config = Config()
+register_states = RegisterStates()
