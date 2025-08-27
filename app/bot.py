@@ -5,7 +5,7 @@ from telegram.ext import (
     MessageHandler, Filters,
 )
 
-from .config import config, register_states
+from .config import config, register_states, booking_stadion_states
 from .database import engine, Base
 from . import handlers
 
@@ -33,6 +33,17 @@ def run_bot() -> None:
     )
     dispatcher.add_handler(register_conversion_handler)
 
+    book_stadion_handler = ConversationHandler(
+        entry_points=[MessageHandler(Filters.text("🏟 Stadion band qilish"), handlers.send_date)],
+        states={
+            booking_stadion_states.DATE: [],
+            booking_stadion_states.TIME: [],
+            booking_stadion_states.CONFIRM: [],
+            booking_stadion_states.PAYMENT: []
+        },
+        fallbacks=[]
+    )
+    dispatcher.add_handler(book_stadion_handler)
+
     updater.start_polling()
     updater.idle()
-

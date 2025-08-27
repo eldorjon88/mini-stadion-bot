@@ -1,7 +1,10 @@
+import datetime
+
 from telegram import (
     Update,
     ReplyKeyboardMarkup, KeyboardButton,
     ReplyKeyboardRemove,
+    InlineKeyboardMarkup, InlineKeyboardButton,
 )
 from telegram.ext import CallbackContext
 from sqlalchemy.orm import Session
@@ -29,13 +32,14 @@ def send_menu(update: Update, context: CallbackContext):
     user = update.effective_user
     context.bot.send_message(
         chat_id=user.id,
-        text="Bosh menu",
+        text="Dinamo Station\n\n" \
+             "Manzil: Samarqand Shaxar\n",
         reply_markup=ReplyKeyboardMarkup(
             keyboard=[
-                [KeyboardButton("Stadion band qilish")],
+                [KeyboardButton("🏟 Stadion band qilish")],
                 [
-                    KeyboardButton("Yordam"),
-                    KeyboardButton("Profilim"),
+                    KeyboardButton("ℹ️ Yordam"),
+                    KeyboardButton("👤 Profilim"),
                 ]
             ],
             resize_keyboard=True
@@ -126,4 +130,41 @@ def save_user(update: Update, context: CallbackContext):
         reply_markup=ReplyKeyboardRemove()
     )
 
-    # TODO: redirect menu
+    send_menu(update, context)
+
+
+def send_date(update: Update, context: CallbackContext):
+    months = {
+        "January": "yanvar",
+        "February": "fevral",
+        "March": "mart",
+        "April": "aprel",
+        "May": "may",
+        "June": "iyun",
+        "July": "iyul",
+        "August": "avgust",
+        "September": "sentabr",
+        "October": "oktabr",
+        "November": "noyabr",
+        "December": "dekabr",
+    }
+    date = datetime.date.today()
+    keyboard = [[
+        InlineKeyboardButton(
+            f'📅 {date.day}-{months[date.strftime("%B")]}',
+            callback_data=f"date:{date}"
+        )
+    ]]
+    for _ in range(6):
+        date += datetime.timedelta(days=1)
+        keyboard.append([
+            InlineKeyboardButton(
+                f'📅 {date.day}-{months[date.strftime("%B")]}',
+                callback_data=f"date:{date}"
+            )
+        ])
+
+    update.message.reply_text(
+        'sanani tanlang',
+        reply_markup=InlineKeyboardMarkup(keyboard)
+    )

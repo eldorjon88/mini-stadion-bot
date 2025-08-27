@@ -19,5 +19,13 @@ class RegisterStates:
     CONFIRM = 2
 
 
+class BookStadionStates:
+    DATE = 0
+    TIME = 1
+    CONFIRM = 2
+    PAYMENT = 3
+
+
 config = Config()
 register_states = RegisterStates()
+booking_stadion_states = BookStadionStates()
